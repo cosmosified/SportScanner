@@ -23,7 +23,7 @@ regex_title_file_name = [
 
 # Look for episodes.
 def Scan(path, files, mediaList, subdirs):
-    print "SS: Starting scan"
+    print("SS: Starting scan")
     #print "SS: path |", path, "|"
     #print "SS: files |", files, "|"
     #print "SS: subdirs |", subdirs, "|"
@@ -54,17 +54,17 @@ def Scan(path, files, mediaList, subdirs):
 
     if len(paths) == 1 and len(paths[0]) == 0 or len(path) == 0 :
         # This is just a load of files dumped in the root directory - we can't deal with this properly
-        print "SS: In TLD, no files here can be scanned"
+        print("SS: In TLD, no files here can be scanned")
         return
 
     elif len(paths) == 1 and len(paths[0]) > 0:
         # These files have been dumped into a League directory but have no seasons.
         for file in clean_files:
-            print "SS: Working on file | {0} |".format(file)
+            print("SS: Working on file | {0} |".format(file))
             for rx in regex_all_in_file_name:
                 match = re.search(rx, file, re.IGNORECASE)
                 if match:
-                    print "SS: matched regex | {0} |".format(rx)
+                    print("SS: matched regex | {0} |".format(rx))
                     year = match.group('year')
                     month = int(match.group('month'))
                     day = int(match.group('day'))
@@ -77,7 +77,7 @@ def Scan(path, files, mediaList, subdirs):
 
                     # Work out where the .SportScanner file should be
                     filename = re.sub(r'(.*\\).*?$',r'\1SportScanner.txt',clean_files[file])
-                    print "SS: FileName: {0}".format(filename)
+                    print("SS: FileName: {0}".format(filename))
 
                     # Check to see if a .SportScanner file exists, then read in the contents
                     if os.path.isfile(filename):
@@ -88,7 +88,7 @@ def Scan(path, files, mediaList, subdirs):
                         season_match = re.search('(?P<season>XX..)',file_contents, re.IGNORECASE)
                         if season_match:
                             season_format = season_match.group('season').lower()
-                            print "SS: Using {0} season format for {1}".format(season_format, show)
+                            print("SS: Using {0} season format for {1}".format(season_format, show))
 
                             if season_format == "xxyy":
                                # If this is a split season then get the dates
@@ -96,22 +96,22 @@ def Scan(path, files, mediaList, subdirs):
                                 if split_dates_match:
                                     split_month = int(split_dates_match.group('month'))
                                     split_day = int(split_dates_match.group('day'))
-                                    print "SS: Split date is {0}-{1}".format(split_month, split_day)
-                                    print "SS: Event date is {0}-{1}".format(month, day)
+                                    print("SS: Split date is {0}-{1}".format(split_month, split_day))
+                                    print("SS: Event date is {0}-{1}".format(month, day))
                                     if month < split_month or (month == split_month and day < split_day):
-                                        print "SS: Event happened before split date"
+                                        print("SS: Event happened before split date")
                                         short_year = year[-2:]
                                         year_before = str(int(short_year) - 1)
                                         season = int("{0}{1}".format(year_before, short_year))
                                     else:
-                                        print "SS: Event happened after split date"
+                                        print("SS: Event happened after split date")
                                         short_year = year[-2:]
                                         year_after = str(int(short_year) + 1)
                                         season = int("{0}{1}".format(short_year, year_after))
                                 else:
-                                    print "SS: Could not match dates"
+                                    print("SS: Could not match dates")
                     else:
-                        print "SS: Could not find {0}, defaulting to XXXX season format"
+                        print("SS: Could not find {0}, defaulting to XXXX season format")
 
                     # Using a hash so that each file gets the same episode number on every scan
                     # The year must be included for seasons that run over a year boundary
@@ -122,7 +122,7 @@ def Scan(path, files, mediaList, subdirs):
                     mediaList.append(tv_show)
                     break
                 else:
-                    print "SS: No match found for {0}".format(file)
+                    print("SS: No match found for {0}".format(file))
     elif len(paths) >= 2:
         # Here we assume that it is in this format: League/Season
         show = paths[0]
@@ -139,11 +139,11 @@ def Scan(path, files, mediaList, subdirs):
 
         # Look for ALL the information we need in the filename - but trust what we have already found
         for file in clean_files:
-            print "SS: Working on file | {0} |".format(file)
+            print("SS: Working on file | {0} |".format(file))
             for rx in regex_all_in_file_name:
                 match = re.search(rx, file, re.IGNORECASE)
                 if match:
-                    print "SS: matched regex | {0} |".format(rx)
+                    print("SS: matched regex | {0} |".format(rx))
                     year = match.group('year')
                     month = int(match.group('month'))
                     day = int(match.group('day'))
@@ -174,4 +174,4 @@ if __name__ == '__main__':
     files = [os.path.join(path, file) for file in os.listdir(path)]
     media = []
     Scan(path[1:], files, media, [])
-    print "SS: media |", media, "|"
+    print("SS: media |", media, "|")

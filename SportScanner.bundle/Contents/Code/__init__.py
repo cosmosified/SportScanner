@@ -55,7 +55,7 @@ def GetResultFromNetwork(url, fetchContent=True):
                 if e.code == 404:
                     return None
 
-                failureCount += 1
+                failur  eCount += 1
                 Log("Failure (%d in a row)" % failureCount)
                 successCount = 0
                 time.sleep(RETRY_TIMEOUT)
